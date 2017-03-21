@@ -1,10 +1,10 @@
 module.exports = function(router){
 	var library = require('library');
 
-	router.get('/user', function(req, res, next){
+	router.get('/user/all', function(req, res, next){
 		library.User.All().then(function(users){
 			res.setHeader('Content-Type', 'application/json');
-	    res.send(users);
+	    	res.send(users);
 		})
 	})
 
