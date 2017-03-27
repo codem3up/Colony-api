@@ -1,6 +1,5 @@
-function init()
-{
-  process.env.PORT = 3000;
+function init() {
+	process.env.PORT = 3000;
 }
 
-module.exports = { init: init }
+module.exports = {init: init}
