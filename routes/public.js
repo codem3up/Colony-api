@@ -1,9 +1,8 @@
 module.exports = function (router) {
+	const request = require('request');
 
-	var projectionEndpoint = 'https://data.colorado.gov/resource/ba4c-qx73.json'
-	var occupationWagesEndpoint = ''
-	var request = require('request');
-
+	const projectionEndpoint = 'https://data.colorado.gov/resource/ba4c-qx73.json'
+	const occupationWagesEndpoints = ''
 
 	router.get('/projections', function (req, res, next) {
 		request(projectionEndpoint, function (error, response, body) {

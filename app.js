@@ -1,12 +1,14 @@
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
 
-var config = require('./config');
+const config = require('./config');
 config.init();
-var routes = require('./routes/index');
+const routes = require('./routes/index');
 
-var app = express();
+const port = 3000;
+
+let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,7 +23,7 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-	var err = new Error('Not Found');
+	let err = new Error('Not Found');
 	err.status = 404;
 	next(err);
 });
@@ -35,5 +37,7 @@ app.use(function (err, req, res, next) {
 	});
 });
 
+app.listen(port)
+console.log("Listening on Port: ", port)
 
 module.exports = app;

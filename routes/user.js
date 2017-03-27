@@ -1,5 +1,5 @@
 module.exports = function (router) {
-	var library = require('library');
+	const library = require('library');
 
 	router.get('/user/all', function (req, res, next) {
 		library.User.All().then(function (users) {
@@ -9,10 +9,10 @@ module.exports = function (router) {
 	})
 
 	router.post('/user/new', function (req, res, next) {
-		var userParams = req.body.User;
-		var user = new library.User(userParams.username, userParams.password);
-		console.log(userParams);
+		let userParams = req.body;
+		let user = new library.User(userParams.username, userParams.password);
 		user.save().then(function (successful) {
+			console.log("New User Added")
 			res.setHeader('Content-Type', 'application/json');
 			res.send({result: true})
 		}).catch(function (err) {

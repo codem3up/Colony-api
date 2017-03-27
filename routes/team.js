@@ -1,5 +1,5 @@
 module.exports = function (router) {
-	var library = require('library');
+	const library = require('library');
 
 
 	router.get('/member/all', function (req, res, next) {
@@ -59,20 +59,22 @@ module.exports = function (router) {
 		res.setHeader('Content-Type', 'application/json');
 
 
-		var teamParams = req.body.teamMember;
+		let teamParams = req.body;
 
 		if (!teamParams) {
 			res.sendStatus(404);
 			return;
 		}
 
+		console.log(req.params.id)
+
 		if (library.isValidId(req.params.id)) {
 			library.User.Find({_id: req.params.id}).then(function (user) {
 				//User was found
 				if (user && user["username"]) {
-					var date = Date.now();
+					let date = Date.now();
 
-					var teamMember = new library.TeamMember(user._id, teamParams.firstName, teamParams.lastName, teamParams.occupation,
+					let teamMember = new library.TeamMember(user._id, teamParams.firstName, teamParams.lastName, teamParams.occupation,
 						teamParams.wage, teamParams.wageType, teamParams.startDate,
 						date, date, teamParams.profileImage);
 
