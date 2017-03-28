@@ -1,5 +1,8 @@
 const config = require('./config.js')
+
+const library = require('library');
 const request = require('request');
+
 
 let occupationEndpoint = config.occupationEndpoint;
 
@@ -35,6 +38,11 @@ function getOccupationEndpoints() {
 
 			for (var i = 0; i < objects.length; i++) {
 				//Save object
+				var occ = objects[i];
+				let publicOccupation = new library.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
+							   occ.ratetydesc, occ.empcount, occ.mean, occ.median,
+							   occ.pct10, occ.pct25, occ.pct75, occ.pct90);
+				console.log("Occupation", publicOccupation);
 			}
 
 			console.log(objects);
