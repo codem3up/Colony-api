@@ -2,7 +2,6 @@ module.exports = function (mongoose) {
 	const Q = require('q');
 
 	const Schema = mongoose.Schema;
-
 	const teamMemberSchema = new Schema({
 		userId: {type: String, required: true},
 		firstName: {type: String, required: true},
@@ -17,8 +16,7 @@ module.exports = function (mongoose) {
 	});
 
 	const teamMemberModel = mongoose.model('teamMember', teamMemberSchema);
-
-	let TeamMember = function (userId, firstName, lastName, occupation, wage,
+	const TeamMember = function (userId, firstName, lastName, occupation, wage,
 							   wageType, startDate, createdAt, updatedAt,
 							   profileImage) {
 		this.userId = userId;
@@ -67,7 +65,6 @@ module.exports = function (mongoose) {
 	TeamMember.Delete = function (obj) {
 		console.log("Deleting Team Member");
 		let deferred = Q.defer();
-		console.log(obj);
 		teamMemberModel.findOneAndRemove({_id: obj.id}, function (err) {
 			console.log("FIND ONE");
 			if (err) {

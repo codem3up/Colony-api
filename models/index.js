@@ -4,10 +4,12 @@ mongoose.connect('mongodb://localhost/gocode');
 
 const User = require('./User.js')(mongoose);
 const TeamMember = require('./TeamMember.js')(mongoose);
+const PublicOccupation = require('./PublicOccupation.js')(mongoose);
 
 module.exports = {
 	User: User,
 	TeamMember: TeamMember,
+	PublicOccupation: PublicOccupation,
 	isValidId: isValidId
 }
 
