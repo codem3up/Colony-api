@@ -1,9 +1,9 @@
 module.exports = function (router) {
-	const library = require('library');
+	const models = require('../models/index.js');
 
 
 	router.get('/member/all', function (req, res, next) {
-		library.TeamMember.All().then(function (members) {
+		models.TeamMember.All().then(function (members) {
 			res.setHeader('Content-Type', 'application/json');
 			if (!members) {
 				members = [];
@@ -12,13 +12,14 @@ module.exports = function (router) {
 		})
 	})
 
+
 	router.get('/member/:id', function (req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
 		//Check if valid object id before lookup
 		if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
 			res.send({});
 		} else {
-			library.TeamMember.Find({_id: req.params.id}).then(function (member) {
+			models.TeamMember.Find({_id: req.params.id}).then(function (member) {
 				console.log("member", member);
 				res.send(member);
 			}).catch(function (err) {
@@ -31,11 +32,11 @@ module.exports = function (router) {
 	router.get('/user/:id/member/all', function (req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
 
-		if (library.isValidId(req.params.id)) {
-			library.User.Find({_id: req.params.id}).then(function (user) {
+		if (models.isValidId(req.params.id)) {
+			models.User.Find({_id: req.params.id}).then(function (user) {
 				//User was found
 				if (user && user["_id"]) {
-					library.TeamMember.Find({userId: user._id}).then(function (members) {
+					models.TeamMember.Find({userId: user._id}).then(function (members) {
 						if (!members) {
 							members = [];
 						}
@@ -58,7 +59,6 @@ module.exports = function (router) {
 	router.post('/user/:id/member/new', function (req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
 
-
 		let teamParams = req.body;
 
 		if (!teamParams) {
@@ -66,15 +66,13 @@ module.exports = function (router) {
 			return;
 		}
 
-		console.log(req.params.id)
-
-		if (library.isValidId(req.params.id)) {
-			library.User.Find({_id: req.params.id}).then(function (user) {
+		if (models.isValidId(req.params.id)) {
+			models.User.Find({_id: req.params.id}).then(function (user) {
 				//User was found
 				if (user && user["username"]) {
 					let date = Date.now();
 
-					let teamMember = new library.TeamMember(user._id, teamParams.firstName, teamParams.lastName, teamParams.occupation,
+					let teamMember = new models.TeamMember(user._id, teamParams.firstName, teamParams.lastName, teamParams.occupation,
 						teamParams.wage, teamParams.wageType, teamParams.startDate,
 						date, date, teamParams.profileImage);
 
@@ -96,13 +94,14 @@ module.exports = function (router) {
 		}
 	})
 
+
 	router.get('/user/:id/member/:memberid', function (req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
 		//Check if valid object id before lookup
 		if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
 			res.send({});
 		} else {
-			library.TeamMember.Find({_id: req.params.memberid, userId: req.params.id}).then(function (member) {
+			models.TeamMember.Find({_id: req.params.memberid, userId: req.params.id}).then(function (member) {
 				console.log("member", member);
 				res.send(member);
 			}).catch(function (err) {
@@ -111,10 +110,11 @@ module.exports = function (router) {
 		}
 	})
 
+
 	router.post('/user/:id/member/delete', function (req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
 
-		library.TeamMember.Delete({id: req.params.id}).then(function () {
+		models.TeamMember.Delete({id: req.params.id}).then(function () {
 			res.sendStatus(200);
 		}).catch(function () {
 			console.log(result);
