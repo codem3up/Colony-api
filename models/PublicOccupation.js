@@ -1,7 +1,7 @@
 module.exports = function (mongoose) {
 	const Q = require('q');
-	const Schema = mongoose.Schema;
 
+	const Schema = mongoose.Schema;
 	const publicOccupationSchema = new Schema({
 		stateabbrv: {type: String, required: true},
 		areaname: {type: String, required: true},
@@ -20,8 +20,7 @@ module.exports = function (mongoose) {
 	});
 
 	const publicOccupationModel = mongoose.model('publicOccupation', publicOccupationSchema);
-
-	let PublicOccupation = function (stateabbrv, areaname, occcode, codetitle, ratetype,
+	const PublicOccupation = function (stateabbrv, areaname, occcode, codetitle, ratetype,
 							   ratetydesc, empcount, mean, median,
 							   pct10, pct25, pct75, pct90) {
 		this.stateabbrv = stateabbrv;

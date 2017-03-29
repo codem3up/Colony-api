@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/gocode');
 
-const User = require('./objects/User.js')(mongoose);
-const TeamMember = require('./objects/TeamMember.js')(mongoose);
-const PublicOccupation = require('./objects/PublicOccupation.js')(mongoose);
-
+const User = require('./User.js')(mongoose);
+const TeamMember = require('./TeamMember.js')(mongoose);
+const PublicOccupation = require('./PublicOccupation.js')(mongoose);
 
 module.exports = {
 	User: User,

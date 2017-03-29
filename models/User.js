@@ -1,14 +1,13 @@
 module.exports = function (mongoose) {
 	const Q = require('q');
-	const Schema = mongoose.Schema;
 
+	const Schema = mongoose.Schema;
 	const userSchema = new Schema({
 		username: {type: String, unique: true, required: true, dropDups: true},
 		password: String
 	});
 
 	const userModel = mongoose.model('User', userSchema);
-
 	let User = function (username, password) {
 		this.username = username;
 		this.password = password;
