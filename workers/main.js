@@ -1,18 +1,18 @@
 const config = require('./config.js')
 
-const library = require('library');
+const models = require('../models/index.js');
 const request = require('request');
-
+const mongoose = require('mongoose');
 
 let occupationEndpoint = config.occupationEndpoint;
 
 getOccupationEndpoints();
 
 function getOccupationEndpoints() {
-	let numRows = 5000;
+	let numRows = 500;
 	let offSet = 0;
 
-	var timer = setInterval(function(){
+	let timer = setInterval(function(){
 		let queryParams = new config.query(occupationEndpoint);
 		queryParams.add('periodyear', '2015');
 		queryParams.add('$limit', numRows);
@@ -34,18 +34,26 @@ function getOccupationEndpoints() {
 
 			if (objects.length === 0) {
 				clearInterval(timer);
+				setInterval(function(){
+					mongoose.connection.close();
+				}, config.intervalTime)
 			}
 
 			for (var i = 0; i < objects.length; i++) {
 				//Save object
 				var occ = objects[i];
-				let publicOccupation = new library.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
+				var occupation = new models.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
 							   occ.ratetydesc, occ.empcount, occ.mean, occ.median,
 							   occ.pct10, occ.pct25, occ.pct75, occ.pct90);
-				console.log("Occupation", publicOccupation);
+
+				models.PublicOccupation.Find(occupation).then(function(result){
+					if (result.length == 0){
+						occupation.save();
+					}
+				})
 			}
 
-			console.log(objects);
+			//console.log(objects);
 			console.log("Length: ", objects.length);
 			console.log("occupationEndpoint", endpoint.url);
 

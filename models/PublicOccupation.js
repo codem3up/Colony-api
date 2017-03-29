@@ -42,6 +42,7 @@ module.exports = function (mongoose) {
 
 	let save = function () {
 		let deferred = Q.defer();
+
 		let publicOccupation = new publicOccupationModel(this);
 		publicOccupation.save(function (err) {
 			if (err) {
@@ -63,9 +64,11 @@ module.exports = function (mongoose) {
 
 	PublicOccupation.Find = async function (obj) {
 		let publicOccupations = await(publicOccupationModel.find(obj, function (err, members) {
-			if (err) return null;
+			if (err) {
+				console.log(err); 
+				return null;
+			}
 		}));
-
 		return publicOccupations;
 	};
 
