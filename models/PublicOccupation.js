@@ -46,7 +46,6 @@ module.exports = function (mongoose) {
 		let publicOccupation = new publicOccupationModel(this);
 		publicOccupation.save(function (err) {
 			if (err) {
-				console.log(err);
 				deferred.reject(false);
 			}
 			deferred.resolve(true);
