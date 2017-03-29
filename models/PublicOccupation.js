@@ -20,6 +20,7 @@ module.exports = function (mongoose) {
 	});
 
 	const publicOccupationModel = mongoose.model('publicOccupation', publicOccupationSchema);
+
 	const PublicOccupation = function (stateabbrv, areaname, occcode, codetitle, ratetype,
 							   ratetydesc, empcount, mean, median,
 							   pct10, pct25, pct75, pct90) {
@@ -62,13 +63,14 @@ module.exports = function (mongoose) {
 	};
 
 	PublicOccupation.Find = async function (obj) {
-		let publicOccupations = await(publicOccupationModel.find(obj, function (err, members) {
+		let occupations = await(publicOccupationModel.find(obj, function (err, members) {
 			if (err) {
-				console.log(err); 
+				console.log(err);
 				return null;
 			}
 		}));
-		return publicOccupations;
+
+		return occupations;
 	};
 
 	PublicOccupation.Delete = function (obj) {
