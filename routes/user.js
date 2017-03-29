@@ -2,39 +2,66 @@ module.exports = function (router) {
 	const models = require('../models/index.js');
 
 
-	router.get('/user/all', function (req, res, next) {
-		models.User.All().then(function (users) {
-			res.setHeader('Content-Type', 'application/json');
+	//TODO build /login endpoint and use this statement to validate the passwordHash
+	// let valid = await models.User.ValidatePassword(userParams.password, saltAndHash.hash); Use this later /login
+
+	router.get('/user/all', async function (req, res, next) {
+		res.setHeader('Content-Type', 'application/json');
+
+		try {
+			let users = await models.User.All();
+			console.log(users.length + " Users Found")
 			res.send(users);
-		})
-	})
+		}
+		catch (e) {
+			console.error("Error: " + e)
+			res.send({error: "Failed to get users list"});
+		}
 
-
-	router.post('/user/new', function (req, res, next) {
-		let userParams = req.body;
-		let user = new models.User(userParams.username, userParams.password);
-		user.save().then(function (successful) {
-			console.log("New User Added")
-			res.setHeader('Content-Type', 'application/json');
-			res.send({result: true})
-		}).catch(function (err) {
-			res.send({result: false})
-		});
 	});
 
 
-	router.get('/user/:id', function (req, res, next) {
+	router.post('/user/new', async function (req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
+
+		let username = req.body.username.toLowerCase();
+		let password = req.body.password;
+
+		try {
+			let saltAndHash = await models.User.GenerateSaltAndHash(password);
+			let user = new models.User(username, saltAndHash.hash, saltAndHash.salt);
+			let successful = await user.save();
+			console.log("New User Added: ", username);
+			res.send({success: true});
+		}
+		catch (e) {
+			console.error("Error: " + e)
+			res.send({error: "Failed to add a new user"});
+		}
+
+	});
+
+
+	router.get('/user/:id', async function (req, res, next) {
+		res.setHeader('Content-Type', 'application/json');
+
 		//Check if valid object id before lookup
 		if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-			res.send({});
-		} else {
-			models.User.Find({_id: req.params.id}).then(function (user) {
-				res.send(user);
-			}).catch(function (err) {
-				res.send(err);
-			})
+			console.log("Invalid character entered");
+			res.send({error: "Invalid character entered"});
 		}
+		else {
+			try {
+				let user = await models.User.Find({_id: req.params.id})
+				console.log("User Found: ", req.params.id)
+				res.send(user);
+			}
+			catch (e) {
+				console.error("Error: " + e)
+				res.send({error: "Failed to lookup user"});
+			}
+		}
+
 	})
 
 
