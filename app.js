@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const config = require('./config');
-config.init();
 const routes = require('./routes/index');
 
 const port = 3000;

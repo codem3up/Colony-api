@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "make test",
-    "start": "node ./bin/www",
+    "start": "node app.js",
     "deploy": "forever start ./bin/www"
   },
   "dependencies": {
