@@ -1,6 +1,6 @@
 module.exports = {
 	authToken: 'klRv6VO06Sm7SNJdAaty8V3tT',
-	intervalTime: 10000,
+	intervalTime: 2000,
 	occupationEndpoint: 'https://data.colorado.gov/resource/vu7j-izta.json',
 	query: queryParams
 }
