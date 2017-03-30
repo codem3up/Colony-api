@@ -9,7 +9,7 @@ let occupationEndpoint = config.occupationEndpoint;
 getOccupationEndpoints();
 
 function getOccupationEndpoints() {
-	let numRows = 1000;
+	let numRows = 5000;
 	let offSet = 0;
 
 	let timer = setInterval(function(){
@@ -30,19 +30,19 @@ function getOccupationEndpoints() {
 				console.log("ERROR: " + occupationEndpoint, error);
 			}
 
-			var objects = JSON.parse(body);
+			let objects = JSON.parse(body);
 
 			if (objects.length === 0) {
 				console.log("Public Objects Query Complete");
 				clearInterval(timer);
 			}
 
-			for (var i = 0; i < objects.length; i++) {
+			for (let i = 0; i < objects.length; i++) {
 				//Save object
-				var occ = objects[i];
-				var occupation = new models.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
+				let occ = objects[i];
+				let occupation = new models.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
 							   occ.ratetydesc, occ.empcount, occ.mean, occ.median,
-							   occ.pct10, occ.pct25, occ.pct75, occ.pct90);
+							   occ.pct10, occ.pct25, occ.pct75, occ.pct90, occ.periodyear);
 
 				occupation.save();
 			}
