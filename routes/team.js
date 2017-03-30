@@ -80,7 +80,7 @@ module.exports = function (router) {
 						date, date, teamParams.profileImage);
 
 					let success = await teamMember.save();
-					console.log("New Teammember Added: ", teamMember);
+					console.log("New Teammember Added");
 					res.send({success: true});
 				}
 				//User not found
