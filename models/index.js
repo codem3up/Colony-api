@@ -16,10 +16,8 @@ module.exports = {
 //global functions go here
 function isValidId(obj) {
 	if (obj.match(/^[0-9a-fA-F]{24}$/)) {
-		console.log("TRUE");
 		return true;
 	} else {
-		console.log("FALSE");
 		return false;
 	}
 }
