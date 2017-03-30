@@ -33,9 +33,9 @@ module.exports = function (router) {
 		}
 	})
 
-		router.get('/user/:id/comparelatestsalaries', async (req, res, next) => {
+	router.get('/user/:id/comparelatestsalaries', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
-
+			
 		try {
 			let teamMembers = await models.TeamMember.Find({ userId: req.params.id });
 			let info = [];
