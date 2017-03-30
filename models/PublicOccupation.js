@@ -16,13 +16,14 @@ module.exports = function (mongoose) {
 		pct25: {type: Number, required: true},
 		pct75: {type: Number, required: true},
 		pct90: {type: Number, required: true},
-
+		periodyear: {type: String}
 	});
 
 	const publicOccupationModel = mongoose.model('publicOccupation', publicOccupationSchema);
+
 	const PublicOccupation = function (stateabbrv, areaname, occcode, codetitle, ratetype,
 							   ratetydesc, empcount, mean, median,
-							   pct10, pct25, pct75, pct90) {
+							   pct10, pct25, pct75, pct90, periodyear) {
 		this.stateabbrv = stateabbrv;
 		this.areaname = areaname;
 		this.occcode = occcode;
@@ -36,6 +37,7 @@ module.exports = function (mongoose) {
 		this.pct25 = pct25;
 		this.pct75 = pct75;
 		this.pct90 = pct90;
+		this.periodyear = periodyear;
 
 		this.save = save;
 	}
@@ -46,7 +48,6 @@ module.exports = function (mongoose) {
 		let publicOccupation = new publicOccupationModel(this);
 		publicOccupation.save(function (err) {
 			if (err) {
-				console.log(err);
 				deferred.reject(false);
 			}
 			deferred.resolve(true);
@@ -63,13 +64,12 @@ module.exports = function (mongoose) {
 	};
 
 	PublicOccupation.Find = async function (obj) {
-		let publicOccupations = await(publicOccupationModel.find(obj, function (err, members) {
-			if (err) {
-				console.log(err); 
-				return null;
-			}
-		}));
-		return publicOccupations;
+		try {
+			let occupations = await publicOccupationModel.find(obj);
+			return occupations;
+		} catch (e) {
+			console.log("Failed to find occupations : " + e);
+		}
 	};
 
 	PublicOccupation.Delete = function (obj) {
