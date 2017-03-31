@@ -7,7 +7,7 @@ require('./team')(router);
 
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
 	res.render('index');
 });
 
