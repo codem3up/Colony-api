@@ -1,4 +1,4 @@
-module.exports = function (router) {
+module.exports = (router) => {
 	const models = require('../models/index.js');
 
 
@@ -10,7 +10,8 @@ module.exports = function (router) {
 				members = [];
 			}
 			res.send(members);
-		} catch (e) {
+		}
+		catch (e) {
 			console.error("Error: " + e);
 			res.send({error: "Failed to get team members"});
 		}
@@ -20,13 +21,15 @@ module.exports = function (router) {
 	router.get('/member/:id', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
-		if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-			res.send({});
-		} else {
-			let member = await models.TeamMember.Find({_id: req.params.id});
-			res.send(member);
+			if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+				res.send({});
+			}
+			else {
+				let member = await models.TeamMember.Find({_id: req.params.id});
+				res.send(member);
+			}
 		}
-		} catch (e) {
+		catch (e) {
 			console.log("Error: " + e);
 			res.send({error: "Failed to get team member"});
 		}
@@ -35,23 +38,25 @@ module.exports = function (router) {
 
 	router.get('/user/:id/member/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
-		try{
+		try {
 			if (models.isValidId(req.params.id)) {
 				let user = await models.User.Find({_id: req.params.id});
-					if (user && user["_id"]) {
-						let members = await models.TeamMember.Find({userId: user._id});
-						if (!members) {
-							members = [];
-						}
-						res.send(members);
+				if (user && user["_id"]) {
+					let members = await models.TeamMember.Find({userId: user._id});
+					if (!members) {
+						members = [];
 					}
-					else {
-						res.send({error: "User not found"});
-					}
-			} else {
+					res.send(members);
+				}
+				else {
+					res.send({error: "User not found"});
+				}
+			}
+			else {
 				res.send({error: "ID not valid"});
 			}
-		} catch (e) {
+		}
+		catch (e) {
 			console.log("Error: " + e);
 			res.send({error: "Failed to get members"});
 		}
@@ -66,10 +71,8 @@ module.exports = function (router) {
 				res.sendStatus(404);
 				return;
 			}
-
 			if (models.isValidId(req.params.id)) {
 				let user = await models.User.Find({_id: req.params.id});
-				//User was found
 				if (user && user["username"]) {
 					let date = Date.now();
 
@@ -81,35 +84,38 @@ module.exports = function (router) {
 					console.log("New team member Added: ", user._id);
 					res.send({success: true});
 				}
-				//User not found
 				else {
 					res.send({error: "User not found"});
 				}
-			} else {
+			}
+			else {
 				res.send({error: "ID not valid"});
 			}
-		} catch (e) {
+		}
+		catch (e) {
 			console.log("Error: " + e);
 			res.send({error: "Failed to save team member"});
 		}
-	})
+	});
 
 
 	router.get('/user/:id/member/:memberid', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		//Check if valid object id before lookup
-		try{
+		try {
 			if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
 				res.send({});
-			} else {
+			}
+			else {
 				let member = await models.TeamMember.Find({_id: req.params.memberid, userId: req.params.id});
 				res.send(member);
 			}
-		} catch (e) {
+		}
+		catch (e) {
 			console.log("Error: " + e);
 			res.send({error: "Team member not found"});
 		}
-	})
+	});
 
 
 	router.post('/user/:id/member/:memberid/delete', async (req, res, next) => {
@@ -118,11 +124,12 @@ module.exports = function (router) {
 			let success = await models.TeamMember.Delete({id: req.params.memberid});
 			console.log("Team member deleted: ", success._id);
 			res.send({success: true});
-		} catch (e) {
+		}
+		catch (e) {
 			console.log("Error: " + e);
 			res.send({error: "Failed to delete team member"});
 		}
 	})
 
 
-}
+};
