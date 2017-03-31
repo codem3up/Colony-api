@@ -12,7 +12,7 @@ module.exports = function (router) {
 			res.send(members);
 		} catch (e) {
 			console.error("Error: " + e);
-			res.send({error: "Failed to get team member"});
+			res.send({error: "Failed to get team members"});
 		}
 	})
 
@@ -28,7 +28,7 @@ module.exports = function (router) {
 		}
 		} catch (e) {
 			console.log("Error: " + e);
-			res.send({error: "Failed to get member"});
+			res.send({error: "Failed to get team member"});
 		}
 	})
 
@@ -38,15 +38,13 @@ module.exports = function (router) {
 		try{
 			if (models.isValidId(req.params.id)) {
 				let user = await models.User.Find({_id: req.params.id});
-					//User was found
 					if (user && user["_id"]) {
-						members = await models.TeamMember.Find({userId: user._id});
+						let members = await models.TeamMember.Find({userId: user._id});
 						if (!members) {
 							members = [];
 						}
 						res.send(members);
 					}
-					//User not found
 					else {
 						res.send({error: "User not found"});
 					}
@@ -80,7 +78,7 @@ module.exports = function (router) {
 						date, date, teamParams.profileImage);
 
 					let success = await teamMember.save();
-					console.log("New Teammember Added");
+					console.log("New team member Added: ", user._id);
 					res.send({success: true});
 				}
 				//User not found
@@ -92,7 +90,7 @@ module.exports = function (router) {
 			}
 		} catch (e) {
 			console.log("Error: " + e);
-			res.send({error: "Failed to save member"});
+			res.send({error: "Failed to save team member"});
 		}
 	})
 
@@ -109,7 +107,7 @@ module.exports = function (router) {
 			}
 		} catch (e) {
 			console.log("Error: " + e);
-			res.send({error: "Member not found"});
+			res.send({error: "Team member not found"});
 		}
 	})
 
@@ -117,12 +115,12 @@ module.exports = function (router) {
 	router.post('/user/:id/member/:memberid/delete', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
-			console.log(req.params.memberid);
-			success = models.TeamMember.Delete({id: req.params.memberid});
+			let success = await models.TeamMember.Delete({id: req.params.memberid});
+			console.log("Team member deleted: ", success._id);
 			res.send({success: true});
 		} catch (e) {
 			console.log("Error: " + e);
-			res.send({error: "Delete unsuccessful"});
+			res.send({error: "Failed to delete team member"});
 		}
 	})
 

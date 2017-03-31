@@ -1,4 +1,4 @@
-module.exports = function (mongoose) {
+module.exports = (mongoose) => {
 	const Q = require('q');
 	const bcrypt = require('bcrypt')
 
@@ -12,47 +12,50 @@ module.exports = function (mongoose) {
 	});
 
 	const userModel = mongoose.model('User', userSchema);
-	const User = function (username, passwordHash, hashSalt) {
-		this.username = username;
-		this.passwordHash = passwordHash;
-		this.hashSalt = hashSalt;
-		this.save = save;
+
+	class User {
+		constructor(username, passwordHash, hashSalt) {
+			this.username = username;
+			this.passwordHash = passwordHash;
+			this.hashSalt = hashSalt;
+		};
+
+		async save() {
+			let deferred = Q.defer();
+			let user = new userModel(this);
+			try {
+				let save = await user.save();
+				deferred.resolve(save);
+			}
+			catch (e) {
+				console.log("Failed to insert user into the database - Probably a duplicate username");
+				deferred.reject("/models/User.js - save(): " + e);
+			}
+
+			return deferred.promise;
+		}
+
 	}
 
-	let save = async function () {
-		let deferred = Q.defer();
-		let user = new userModel(this);
-		try {
-			let save = await user.save();
-			deferred.resolve(save);
-		}
-		catch (e) {
-			console.log("Failed to insert user into the database - Probably a duplicate username");
-			deferred.reject("Error: /routes/user.js - save(): " + e);
-		}
 
-		return deferred.promise;
-	}
-
-
-	User.All = async function () {
+	User.All = async () => {
 		try {
 			let users = await userModel.find({});
 			return users;
 		}
 		catch (e) {
-			console.log("Failed to get all users" + e);
+			console.log("Failed to get all users: " + e);
 		}
 
 	};
 
-	User.Find = async function (idObj) {
+	User.Find = async (idObj) => {
 		try {
 			let user = await userModel.findOne(idObj);
 			return user;
 		}
 		catch (e) {
-			console.log("Failed to get a user" + e);
+			console.log("Failed to get a user: " + e);
 		}
 
 	};
@@ -64,7 +67,7 @@ module.exports = function (mongoose) {
 			return {salt: salt, hash: hash};
 		}
 		catch (e) {
-			console.log("Failed to generate salt and hash" + e);
+			console.log("Failed to generate salt and hash: " + e);
 		}
 
 	};
@@ -75,7 +78,7 @@ module.exports = function (mongoose) {
 			return isValid;
 		}
 		catch (e) {
-			console.log("Failed to validate password" + e);
+			console.log("Failed to validate password: " + e);
 		}
 
 	};
