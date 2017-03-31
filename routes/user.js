@@ -1,16 +1,16 @@
-module.exports = function (router) {
+module.exports = (router) => {
 	const models = require('../models/index.js');
 
 
-	//TODO build /login endpoint and use this statement to validate the passwordHash
+	//TODO build /authentication endpoint and use this statement to validate the passwordHash
 	// let valid = await models.User.ValidatePassword(userParams.password, saltAndHash.hash); Use this later /login
 
-	router.get('/user/all', async function (req, res, next) {
+	router.get('/user/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		try {
 			let users = await models.User.All();
-			console.log(users.length + " Users Found")
+			console.log("Users Found: " , users.length)
 			res.send(users);
 		}
 		catch (e) {
@@ -21,7 +21,7 @@ module.exports = function (router) {
 	});
 
 
-	router.post('/user/new', async function (req, res, next) {
+	router.post('/user/new', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		let username = req.body.username.toLowerCase();
@@ -31,7 +31,7 @@ module.exports = function (router) {
 			let saltAndHash = await models.User.GenerateSaltAndHash(password);
 			let user = new models.User(username, saltAndHash.hash, saltAndHash.salt);
 			let successful = await user.save();
-			console.log("New User Added: ", username);
+			console.log("New User Added: ", successful._id);
 			res.send({success: true});
 		}
 		catch (e) {
@@ -42,7 +42,7 @@ module.exports = function (router) {
 	});
 
 
-	router.get('/user/:id', async function (req, res, next) {
+	router.get('/user/:id', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		//Check if valid object id before lookup

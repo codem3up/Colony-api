@@ -1,4 +1,4 @@
-module.exports = function (mongoose) {
+module.exports = (mongoose) => {
 	const Q = require('q');
 
 	const Schema = mongoose.Schema;
@@ -16,68 +16,76 @@ module.exports = function (mongoose) {
 	});
 
 	const teamMemberModel = mongoose.model('teamMember', teamMemberSchema);
-	const TeamMember = function (userId, firstName, lastName, occupation, wage,
-							   wageType, startDate, createdAt, updatedAt,
-							   profileImage) {
-		this.userId = userId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.occupation = occupation;
-		this.wage = wage;
-		this.wageType = wageType;
-		this.startDate = startDate;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.profileImage = profileImage;
+	class TeamMember {
+		constructor(userId, firstName, lastName, occupation, wage,
+					wageType, startDate, createdAt, updatedAt,
+					profileImage) {
+			this.userId = userId;
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.occupation = occupation;
+			this.wage = wage;
+			this.wageType = wageType;
+			this.startDate = startDate;
+			this.createdAt = createdAt;
+			this.updatedAt = updatedAt;
+			this.profileImage = profileImage;
+		};
 
-		this.save = save;
+		async save() {
+			let deferred = Q.defer();
+			let teamMember = new teamMemberModel(this);
+			try {
+				let save = await teamMember.save();
+				deferred.resolve(save);
+			}
+			catch (e) {
+				console.log("Failed to insert team member into the database");
+				deferred.reject("Error: /models/TeamMember.js - save(): " + e);
+			}
+
+			return deferred.promise;
+		}
+
 	}
 
-	let save = function () {
+
+	TeamMember.All = async (obj) => {
+		try {
+			let teamMembers = await teamMemberModel.find({});
+			return teamMembers;
+		}
+		catch (e) {
+			console.log("Failed to get all team members: " + e);
+		}
+
+	};
+
+	TeamMember.Find = async (obj) => {
+		try {
+			let teamMembers = await teamMemberModel.find(obj);
+			return teamMembers;
+		}
+		catch (e) {
+			console.log("Failed to get a team member: " + e);
+		}
+
+	};
+
+	TeamMember.Delete = async (obj) => {
 		let deferred = Q.defer();
-		let teamMember = new teamMemberModel(this);
-		teamMember.save(function (err) {
-			if (err) {
-				console.log(err);
-				deferred.reject(false);
-			}
-			deferred.resolve(true);
-		})
+		try {
+			let remove = await teamMemberModel.findOneAndRemove({_id: obj.id});
+			deferred.resolve(remove)
+		}
+		catch (e) {
+			console.log("Failed to delete a team member: " + e)
+			deferred.reject("Error: /models/TeamMember.js - TeamMember.Delete(): " + e)
+		}
+
 		return deferred.promise;
 	}
 
-	TeamMember.All = async function (obj) {
-		let teamMembers = await(teamMemberModel.find({}, function (err, members) {
-			if (err) return null;
-		}));
-
-		return teamMembers;
-	};
-
-	TeamMember.Find = async function (obj) {
-		let teamMembers = await(teamMemberModel.find(obj, function (err, members) {
-			if (err) return null;
-		}));
-
-		return teamMembers;
-	};
-
-	TeamMember.Delete = function (obj) {
-		console.log("Deleting Team Member");
-		let deferred = Q.defer();
-		teamMemberModel.findOneAndRemove({_id: obj.id}, function (err) {
-			console.log("FIND ONE");
-			if (err) {
-				console.log("ERROR", err);
-				deferred.reject(false);
-			}
-			else {
-				console.log("SUCCESS!");
-				deferred.resolve(true);
-			}
-		});
-		return deferred.promise;
-	}
 
 	return TeamMember;
 }
