@@ -66,5 +66,13 @@ module.exports = (router) => {
 
 	})
 
+	router.get('/user/:id/member/:memberid/salary', async (req, res, next) => {
+		try{
 
-};
+		} catch(err) {
+			
+		}
+
+		res.render('salariesperyear');
+	});
+}
