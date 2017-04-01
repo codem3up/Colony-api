@@ -72,7 +72,6 @@ module.exports = (router) => {
 		} catch(err) {
 			
 		}
-
 		res.render('salariesperyear');
 	});
 }
