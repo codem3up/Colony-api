@@ -10,7 +10,7 @@ module.exports = (router) => {
 
 		try {
 			let users = await models.User.All();
-			console.log("Users Found: " , users.length)
+			console.log("Users Found: ", users.length)
 			res.send(users);
 		}
 		catch (e) {
