@@ -11,12 +11,13 @@ module.exports = (mongoose) => {
 		ratetydesc: {type: String},
 		empcount: {type: Number},
 		mean: {type: Number, required: true},
-		median: {type: Number, required: true},
-		pct10: {type: Number, required: true},
-		pct25: {type: Number, required: true},
-		pct75: {type: Number, required: true},
-		pct90: {type: Number, required: true},
-		periodyear: {type: String}
+		median: {type: Number},
+		pct10: {type: Number},
+		pct25: {type: Number},
+		pct75: {type: Number},
+		pct90: {type: Number},
+		periodyear: {type: String},
+		area: {type: String}
 	});
 
 	const publicOccupationModel = mongoose.model('publicOccupation', publicOccupationSchema);
@@ -24,7 +25,7 @@ module.exports = (mongoose) => {
 	class PublicOccupation {
 		constructor(stateabbrv, areaname, occcode, codetitle, ratetype,
 					ratetydesc, empcount, mean, median,
-					pct10, pct25, pct75, pct90, periodyear) {
+					pct10, pct25, pct75, pct90, periodyear, area) {
 			this.stateabbrv = stateabbrv;
 			this.areaname = areaname;
 			this.occcode = occcode;
@@ -39,6 +40,7 @@ module.exports = (mongoose) => {
 			this.pct75 = pct75;
 			this.pct90 = pct90;
 			this.periodyear = periodyear;
+			this.area = area;
 
 		}
 
@@ -73,6 +75,16 @@ module.exports = (mongoose) => {
 	PublicOccupation.Find = async (obj) => {
 		try {
 			let occupations = await publicOccupationModel.find(obj);
+			return occupations;
+		}
+		catch (e) {
+			console.log("Failed to get an occupation : " + e);
+		}
+	};
+
+	PublicOccupation.FindOne = async (obj) => {
+		try {
+			let occupations = await publicOccupationModel.findOne(obj);
 			return occupations;
 		}
 		catch (e) {

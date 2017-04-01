@@ -78,7 +78,7 @@ module.exports = (router) => {
 
 					let teamMember = new models.TeamMember(user._id, teamParams.firstName, teamParams.lastName, teamParams.occupation,
 						teamParams.wage, teamParams.wageType, teamParams.startDate,
-						date, date, teamParams.profileImage);
+						date, date, teamParams.profileImage, teamParams.location);
 
 					let success = await teamMember.save();
 					console.log("New team member Added: ", user._id);
@@ -130,6 +130,18 @@ module.exports = (router) => {
 			res.send({error: "Failed to delete team member"});
 		}
 	})
+
+	router.get('/member/:memberid/summary', async (req, res, next) => {
+		try{
+			let member = await models.TeamMember.FindOne({_id: req.params.memberid, });
+			let occupation = await models.PublicOccupation.FindOne({ occcode: member.occupation})
+			member.occupationTitle = occupation.codetitle
+			res.render('summary', { member: member });
+		} catch(err) {
+			console.error("Error: " + err)
+			res.send({error: "Failed to get member"});
+		}
+	});
 
 
 };

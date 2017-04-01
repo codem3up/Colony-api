@@ -42,7 +42,7 @@ function getOccupationEndpoints() {
 				let occ = objects[i];
 				let occupation = new models.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
 							   occ.ratetydesc, occ.empcount, occ.mean, occ.median,
-							   occ.pct10, occ.pct25, occ.pct75, occ.pct90, occ.periodyear);
+							   occ.pct10, occ.pct25, occ.pct75, occ.pct90, occ.periodyear, occ.area);
 
 				occupation.save();
 			}
