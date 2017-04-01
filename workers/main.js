@@ -1,7 +1,7 @@
 const config = require('./config.js')
 
 const models = require('../models/index.js');
-const request = require('request');
+const request = require('request-promise');
 const mongoose = require('mongoose');
 
 let occupationEndpoint = config.occupationEndpoint;

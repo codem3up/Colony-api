@@ -72,15 +72,15 @@ module.exports = (mongoose) => {
 
 	};
 
-	TeamMember.Find = async function (obj) {
+	TeamMember.FindOne = async (obj) => {
 		let teamMembers = await(teamMemberModel.find(obj, function (err, members) {
 			if (err) return null;
 		}));
 
 		return teamMembers;
 	};
-	
-	TeamMember.Delete = function (obj) {
+
+	TeamMember.Delete = async (obj) => {
 		console.log("Deleting Team Member");
 		let deferred = Q.defer();
 		try {
