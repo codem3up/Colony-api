@@ -50,7 +50,7 @@ module.exports = (mongoose) => {
 	}
 
 
-	TeamMember.All = async (obj) => {
+	TeamMember.All = async () => {
 		try {
 			let teamMembers = await teamMemberModel.find({});
 			return teamMembers;
@@ -63,7 +63,10 @@ module.exports = (mongoose) => {
 
 	TeamMember.Find = async (obj) => {
 		try {
-			let teamMembers = await teamMemberModel.find(obj);
+			let teamMembers = await teamMemberModel.findOne(obj);
+			if (!teamMembers) {
+				teamMembers = {};
+			}
 			return teamMembers;
 		}
 		catch (e) {

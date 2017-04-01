@@ -5,13 +5,13 @@ module.exports = (router) => {
 	const projectionEndpoint = 'https://data.colorado.gov/resource/ba4c-qx73.json';
 	const occupationWagesEndpoints = '';
 
-	router.get('/projections', async (req, res, next) => {
+	router.get('/api/publicOccupation/projections', async (req, res, next) => {
 		let response = await request(projectionEndpoint);
 
 	});
 
 
-	router.get('/user/:id/comparesalaries', async (req, res, next) => {
+	router.get('/api/publicOccupation/user/:id/comparesalaries', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		try {
@@ -38,7 +38,7 @@ module.exports = (router) => {
 	});
 
 
-	router.get('/user/:id/comparelatestsalaries', async (req, res, next) => {
+	router.get('/api/publicOccupation/user/:id/occupationalwages', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		try {
