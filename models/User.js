@@ -40,7 +40,6 @@ module.exports = (mongoose) => {
 	User.All = async () => {
 		try {
 			let users = await userModel.find({});
-			// console.log('here: ', users)
 			return users;
 		}
 		catch (e) {
