@@ -1,8 +1,10 @@
 module.exports = (mongoose) => {
 	const Q = require('q');
-	const bcrypt = require('bcrypt')
+	const bcrypt = require('bcrypt');
+	const jwt = require('jsonwebtoken');
 
 	const saltRounds = 10;
+	const tokenExpiry = 60 * 10; // 10 minutes
 
 	const Schema = mongoose.Schema;
 	const userSchema = new Schema({
@@ -21,19 +23,20 @@ module.exports = (mongoose) => {
 		};
 
 		async save() {
-			let deferred = Q.defer();
+			let d = Q.defer();
 			let user = new userModel(this);
 			try {
 				let save = await user.save();
-				deferred.resolve(save);
+				d.resolve(save);
 			}
 			catch (e) {
 				console.log("Failed to insert user into the database - Probably a duplicate username");
-				deferred.reject("/models/User.js - save(): " + e);
+				d.reject("/models/User.js - save(): " + e);
 			}
 
-			return deferred.promise;
+			return d.promise;
 		}
+
 	}
 
 
@@ -79,6 +82,36 @@ module.exports = (mongoose) => {
 		catch (e) {
 			console.log("Failed to validate password: " + e);
 		}
+
+	};
+
+	User.GetToken = async (user, jwtSecret) => {
+		let d = Q.defer();
+		try {
+			let token = await jwt.sign(user, jwtSecret, {
+				expiresIn: tokenExpiry
+			});
+			d.resolve(token);
+		}
+		catch (e) {
+			console.log("Failed to get token: " + e);
+			d.reject("/models/User.js - GetToken(): " + e)
+		}
+		return d.promise;
+	};
+
+
+	User.VerifyToken = async (token, secret) => {
+		let d = Q.defer();
+		try {
+			let decoded = await jwt.verify(token, secret);
+			d.resolve(decoded);
+		}
+		catch (e) {
+			console.log("Failed to verify token: " + e);
+			d.reject("/models/User.js - VerifyToken(): " + e);
+		}
+		return d.promise;
 
 	};
 

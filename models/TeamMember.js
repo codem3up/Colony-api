@@ -35,18 +35,18 @@ module.exports = (mongoose) => {
 		};
 
 		async save() {
-			let deferred = Q.defer();
+			let d = Q.defer();
 			let teamMember = new teamMemberModel(this);
 			try {
 				let save = await teamMember.save();
-				deferred.resolve(save);
+				d.resolve(save);
 			}
 			catch (e) {
 				console.log("Failed to insert team member into the database");
-				deferred.reject("Error: /models/TeamMember.js - save(): " + e);
+				d.reject("Error: /models/TeamMember.js - save(): " + e);
 			}
 
-			return deferred.promise;
+			return d.promise;
 		}
 
 	}
@@ -87,17 +87,17 @@ module.exports = (mongoose) => {
 
 	TeamMember.Delete = async (obj) => {
 		console.log("Deleting Team Member");
-		let deferred = Q.defer();
+		let d = Q.defer();
 		try {
 			let remove = await teamMemberModel.findOneAndRemove({_id: obj.id});
-			deferred.resolve(remove)
+			d.resolve(remove)
 		}
 		catch (e) {
 			console.log("Failed to delete a team member: " + e)
-			deferred.reject("Error: /models/TeamMember.js - TeamMember.Delete(): " + e)
+			d.reject("Error: /models/TeamMember.js - TeamMember.Delete(): " + e)
 		}
 
-		return deferred.promise;
+		return d.promise;
 	}
 
 

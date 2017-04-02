@@ -2,11 +2,14 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const routes = require('./routes/index');
+const routes = require('./routes/index.js');
+const darkmatter = require('./darkmatter/darkmatter.js');
 
 const port = 3000;
 
 let app = express();
+
+app.set('jwtSecret', darkmatter.jsonWebTokens.secret);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -45,18 +45,18 @@ module.exports = (mongoose) => {
 		}
 
 		async save() {
-			let deferred = Q.defer();
+			let d = Q.defer();
 			let publicOccupation = new publicOccupationModel(this);
 			try {
 				let save = publicOccupation.save();
-				deferred.resolve(save);
+				d.resolve(save);
 			}
 			catch (e) {
 				console.log("Failed to insert public occupation into the database");
-				deferred.reject("Error: /models/PublicOccupation.js - save(): " + e);
+				d.reject("Error: /models/PublicOccupation.js - save(): " + e);
 			}
 
-			return deferred.promise;
+			return d.promise;
 		}
 
 	}
@@ -93,17 +93,17 @@ module.exports = (mongoose) => {
 	};
 
 	PublicOccupation.Delete = (obj) => {
-		let deferred = Q.defer();
+		let d = Q.defer();
 		try {
 			let remove = publicOccupationModel.findOneAndRemove({_id: obj.id});
-			deferred.resolve(remove);
+			d.resolve(remove);
 		}
 		catch (e) {
 			console.log("Failed to delete a public occupation: " + e)
-			deferred.reject("Error: /models/PublicOccupation.js - PublicOccupation.Delete(): " + e)
+			d.reject("Error: /models/PublicOccupation.js - PublicOccupation.Delete(): " + e)
 		}
 
-		return deferred.promise;
+		return d.promise;
 	}
 
 	return PublicOccupation;
