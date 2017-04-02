@@ -2,10 +2,6 @@ module.exports = (router) => {
 	const models = require('../models/index.js');
 
 
-	//TODO build /authentication endpoint and use this statement to validate the passwordHash
-	// let valid = await models.User.ValidatePassword(userParams.password, saltAndHash.hash); Use this later /login
-
-
 	router.post('/api/user/new', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
@@ -27,6 +23,65 @@ module.exports = (router) => {
 	});
 
 
+	router.post('/api/user/authenticate', async (req, res) => {
+		res.setHeader('Content-Type', 'application/json');
+
+		try {
+			let user = await models.User.Find({username: req.body.username.toLowerCase()});
+
+			if (!user) {
+				res.send({success: false, message: 'Authentication failure: user not found.'});
+			}
+			else {
+
+				let passwordValidated = await models.User.ValidatePassword(req.body.password, user.passwordHash)
+
+				if (!passwordValidated) {
+					res.json({success: false, message: 'Authentication failure: wrong password.'});
+				}
+				else {
+					let token = await models.User.GetToken(user, req.app.get('jwtSecret'));
+
+					res.json({
+						success: true,
+						token: token
+					});
+				}
+
+			}
+		}
+		catch (e) {
+			console.error("Error: " + e)
+			res.send({error: "Failed to authenticate user"});
+		}
+	});
+
+
+	router.use(async (req, res, next) => {
+		res.setHeader('Content-Type', 'application/json');
+
+		let token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+		if (token) {
+			try {
+				let decoded = await models.User.VerifyToken(token, req.app.get('jwtSecret'));
+				req.decoded = decoded;
+				next();
+			}
+			catch (e) {
+				console.error("Error: " + e)
+				res.send({success: false, message: 'Failed to authenticate token.'});
+			}
+		}
+		else {
+			return res.status(403).send({
+				success: false,
+				message: 'No token provided.'
+			});
+		}
+	});
+
+
 	router.get('/api/user/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
@@ -39,7 +94,6 @@ module.exports = (router) => {
 			console.error("Error: " + e)
 			res.send({error: "Failed to get users list"});
 		}
-
 	});
 
 
@@ -62,7 +116,6 @@ module.exports = (router) => {
 				res.send({error: "Failed to lookup user"});
 			}
 		}
-
 	})
 
 
