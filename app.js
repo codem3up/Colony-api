@@ -26,7 +26,7 @@ app.use('/', routes);
 app.use((req, res, next) => {
 	let err = new Error('Not Found');
 	err.status = 404;
-	next(err);
+	res.send(err);
 });
 
 // production error handler no stacktraces leaked to user
