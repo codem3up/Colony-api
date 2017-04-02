@@ -87,6 +87,17 @@ module.exports = (router) => {
 		}
 	});
 
+	router.get('/api/user/:id/teamMember/:teamMemberId/summary', async (req, res, next) => {
+		try{
+			let member = await models.TeamMember.FindOne({_id: req.params.teamMemberId, });
+			let occupation = await models.PublicOccupation.FindOne({ occcode: member.occupation})
+			member.occupationTitle = occupation.codetitle
+			res.render('summary', { member: member });
+		} catch(err) {
+			console.error("Error: " + err)
+			res.send({error: "Failed to get member"});
+		}
+	});
 
 	router.post('/api/user/:id/teamMember/:teamMemberId/delete', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
@@ -101,6 +112,4 @@ module.exports = (router) => {
 			res.send({error: "Failed to delete team member"});
 		}
 	})
-
-
 };
