@@ -5,23 +5,8 @@ module.exports = (router) => {
 	//TODO build /authentication endpoint and use this statement to validate the passwordHash
 	// let valid = await models.User.ValidatePassword(userParams.password, saltAndHash.hash); Use this later /login
 
-	router.get('/user/all', async (req, res, next) => {
-		res.setHeader('Content-Type', 'application/json');
 
-		try {
-			let users = await models.User.All();
-			console.log("Users Found: ", users.length)
-			res.send(users);
-		}
-		catch (e) {
-			console.error("Error: " + e)
-			res.send({error: "Failed to get users list"});
-		}
-
-	});
-
-
-	router.post('/user/new', async (req, res, next) => {
+	router.post('/api/user/new', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		let username = req.body.username.toLowerCase();
@@ -42,7 +27,23 @@ module.exports = (router) => {
 	});
 
 
-	router.get('/user/:id', async (req, res, next) => {
+	router.get('/api/user/all', async (req, res, next) => {
+		res.setHeader('Content-Type', 'application/json');
+
+		try {
+			let users = await models.User.All();
+			console.log("Users Found: ", users.length)
+			res.send(users);
+		}
+		catch (e) {
+			console.error("Error: " + e)
+			res.send({error: "Failed to get users list"});
+		}
+
+	});
+
+
+	router.get('/api/user/:id', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		//Check if valid object id before lookup

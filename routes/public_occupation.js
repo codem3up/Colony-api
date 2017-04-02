@@ -5,7 +5,8 @@ module.exports = (router) => {
 	const projectionEndpoint = 'https://data.colorado.gov/resource/ba4c-qx73.json';
 	const occupationWagesEndpoints = '';
 
-	router.get('/api/publicoccupation/all', async (req, res, next) => {
+
+	router.get('/api/publicOccupation/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
 			let occupations = await models.PublicOccupation.All();
@@ -20,7 +21,8 @@ module.exports = (router) => {
 		}
 	})
 
-	router.get('/api/publicoccupation/:id', async (req, res, next) => {
+
+	router.get('/api/publicOccupation/:id', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
 			if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -37,7 +39,7 @@ module.exports = (router) => {
 		}
 	})
 
-	router.get('/user/:id/comparesalaries', async (req, res, next) => {
+	router.get('/api/publicOccupation/user/:id/compareSalaries', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		try {
@@ -65,7 +67,8 @@ module.exports = (router) => {
 
 	});
 
-	router.get('/member/:memberid/publicwages', async (req, res, next) => {
+
+	router.get('/api/publicOccupation/user/:id/occupationalWages', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
 		try {
