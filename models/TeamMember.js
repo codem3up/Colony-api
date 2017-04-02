@@ -13,13 +13,14 @@ module.exports = (mongoose) => {
 		createdAt: {type: Date, required: true},
 		updatedAt: {type: Date, required: true},
 		profileImage: {type: String},
+		location: {type: Number}
 	});
 
 	const teamMemberModel = mongoose.model('teamMember', teamMemberSchema);
 	class TeamMember {
 		constructor(userId, firstName, lastName, occupation, wage,
 					wageType, startDate, createdAt, updatedAt,
-					profileImage) {
+					profileImage, location) {
 			this.userId = userId;
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -30,6 +31,7 @@ module.exports = (mongoose) => {
 			this.createdAt = createdAt;
 			this.updatedAt = updatedAt;
 			this.profileImage = profileImage;
+			this.location = location;
 		};
 
 		async save() {
@@ -75,7 +77,16 @@ module.exports = (mongoose) => {
 
 	};
 
+	TeamMember.FindOne = async (obj) => {
+		let member = await(teamMemberModel.findOne(obj, function (err, member) {
+			if (err) return null;
+		}));
+
+		return member;
+	};
+
 	TeamMember.Delete = async (obj) => {
+		console.log("Deleting Team Member");
 		let deferred = Q.defer();
 		try {
 			let remove = await teamMemberModel.findOneAndRemove({_id: obj.id});

@@ -34,7 +34,6 @@ module.exports = (mongoose) => {
 
 			return deferred.promise;
 		}
-
 	}
 
 
