@@ -48,7 +48,7 @@ module.exports = (router) => {
 			try {
 				let user = await models.User.Find({_id: req.params.id});
 				if (user && user["_id"]) {
-					let members = await models.TeamMember.All();
+					let members = await models.TeamMember.All({userId: user._id});
 					if (!members) {
 						members = [];
 					}

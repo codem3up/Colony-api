@@ -52,9 +52,9 @@ module.exports = (mongoose) => {
 	}
 
 
-	TeamMember.All = async () => {
+	TeamMember.All = async (obj) => {
 		try {
-			let teamMembers = await teamMemberModel.find({});
+			let teamMembers = await teamMemberModel.find(obj);
 			return teamMembers;
 		}
 		catch (e) {
