@@ -68,6 +68,40 @@ module.exports = (router) => {
 		}
 	});
 
+	router.get('/api/user/:id/teamMember/occupation/all', async (req, res, next) => {
+		res.setHeader('Content-Type', 'application/json');
+
+		if (models.isValidId(req.params.id)) {
+			try {
+				let user = await models.User.Find({_id: req.params.id});
+				if (user && user["_id"]) {
+					let members = await models.TeamMember.All();
+					if (!members){
+						res.send({error: "Failed to Find member"});
+					}
+					for(let i = 0; i < members.length; i++) {
+						occupations = await models.PublicOccupation.Find({area: member.location, occcode: member.occupation, ratetype: (member.wageType || 1) });
+						occupations.sort((a, b) => {
+							return new Date(a.periodyear).getTime() - new Date(b.periodyear).getTime()
+						});
+						member.occupationName = occupations[0].codetitle;
+					}
+					res.send(members);
+				}
+				else {
+					res.send({error: "User not found"});
+				}
+			}
+			catch (e) {
+				console.log("Error: " + e);
+				res.send({error: "Failed to get members"});
+			}
+		}
+		else {
+			res.send({error: "ID not valid"});
+		}
+	});
+
 
 	router.get('/api/user/:id/teamMember/:teamMemberId', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');

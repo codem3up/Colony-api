@@ -1,0 +1,93 @@
+module.exports = (mongoose) => {
+	const Q = require('q');
+
+	const Schema = mongoose.Schema;
+	const personalIncomeSchema = new Schema({
+		stateabbrv: {type: String, required: true},
+		areaname: {type: String, required: true},
+		areatype: {type: Number, required: true},
+		area: {type: Number, required: true},
+		periodyear: {type: Number, required: true},
+		periodtype: {type: Number},
+		pertypdesc: {type: String},
+		inctype: {type: Number, required: true},
+		incdesc: {type: String},
+		income: {type: Number},
+		incrank: {type: Number},
+		population: {type: Number},
+	});
+
+	const personalIncomeModel = mongoose.model('personalIncome', personalIncomeSchema);
+
+	class PersonalIncome {
+		constructor(stateabbrv, areaname, areatype, area, periodyear,
+					periodtype, pertypdesc, inctype, incdesc,
+					income, incrank, population) {
+			this.stateabbrv = stateabbrv;
+			this.areaname = areaname;
+			this.areatype = areatype;
+			this.area = area;
+			this.periodyear = periodyear;
+			this.periodtype = periodtype;
+            this.pertypdesc = pertypdesc;
+			this.inctype = inctype;
+			this.incdesc = incdesc;
+			this.income = income;
+			this.incrank = incrank;
+			this.population = population;
+		}
+
+		async save() {
+			let d = Q.defer();
+			let personalIncome = new personalIncomeModel(this);
+			try {
+				let save = personalIncome.save();
+				d.resolve(save);
+			}
+			catch (e) {
+				console.log("Failed to insert public occupation into the database");
+				d.reject("Error: /models/PersonalIncome.js - save(): " + e);
+			}
+
+			return d.promise;
+		}
+
+	}
+
+	PersonalIncome.All = async (obj) => {
+		try {
+			let personalIncomes = await personalIncomeModel.find(obj);
+			return personalIncomes;
+		}
+		catch (e) {
+			console.log("Failed to get occupations : " + e);
+		}
+
+	};
+
+	PersonalIncome.Find = async (obj) => {
+		try {
+			let occupations = await personalIncomeModel.findOne(obj);
+			return occupations;
+		}
+		catch (e) {
+			console.log("Failed to get an occupation : " + e);
+		}
+	};
+
+	PersonalIncome.Delete = (obj) => {
+		let d = Q.defer();
+		try {
+			let remove = personalIncomeModel.findOneAndRemove({_id: obj.id});
+			d.resolve(remove);
+		}
+		catch (e) {
+			console.log("Failed to delete a public occupation: " + e)
+			d.reject("Error: /models/PersonalIncome.js - PersonalIncome.Delete(): " + e)
+		}
+
+		return d.promise;
+	}
+
+	return PersonalIncome;
+}

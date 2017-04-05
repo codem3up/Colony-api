@@ -63,7 +63,7 @@ module.exports = (mongoose) => {
 
 	PublicOccupation.All = async (obj) => {
 		try {
-			let publicOccupations = await publicOccupationModel.find({});
+			let publicOccupations = await publicOccupationModel.find(obj);
 			return publicOccupations;
 		}
 		catch (e) {
@@ -73,16 +73,6 @@ module.exports = (mongoose) => {
 	};
 
 	PublicOccupation.Find = async (obj) => {
-		try {
-			let occupations = await publicOccupationModel.find(obj);
-			return occupations;
-		}
-		catch (e) {
-			console.log("Failed to get an occupation : " + e);
-		}
-	};
-
-	PublicOccupation.FindOne = async (obj) => {
 		try {
 			let occupations = await publicOccupationModel.findOne(obj);
 			return occupations;

@@ -2,10 +2,6 @@ module.exports = (router) => {
 	const models = require('../models/index.js');
 	const request = require('request-promise');
 
-	const projectionEndpoint = 'https://data.colorado.gov/resource/ba4c-qx73.json';
-	const occupationWagesEndpoints = '';
-
-
 	router.get('/api/publicOccupation/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
@@ -80,7 +76,6 @@ module.exports = (router) => {
 			occupations.sort((a, b) => {
 				return new Date(a.periodyear).getTime() - new Date(b.periodyear).getTime()
 			});
-
 			if (occupations) {
 				let teamMemberInfo = {teamMember: member, occupation: occupations};
 				res.send(teamMemberInfo);

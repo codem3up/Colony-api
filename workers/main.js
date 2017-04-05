@@ -1,56 +1,33 @@
 const config = require('./config.js')
+const request = require('request-promise');
 
 const models = require('../models/index.js');
-const request = require('request-promise');
 const mongoose = require('mongoose');
 
-let occupationEndpoint = config.occupationEndpoint;
+const occupationEndpoint = 'https://data.colorado.gov/resource/vu7j-izta.json';
+const incomeEndpoint = 'https://data.colorado.gov/resource/udxx-a7kq.json';
 
-getOccupationEndpoints();
+const publicOccupation = require('./public_occupation_worker.js');
+const personalIncome = require('./personal_income_worker.js');
 
-function getOccupationEndpoints() {
-	let numRows = 5000;
-	let offSet = 0;
+let argument = process.argv[2];
 
-	let timer = setInterval(function(){
-		let queryParams = new config.query(occupationEndpoint);
-		//queryParams.add('periodyear', '2015');
-		queryParams.add('$limit', numRows);
-		queryParams.add('$offset', offSet)
+init();
 
-		let endpoint = {
-			url: occupationEndpoint + queryParams.query,
-			headers: {
-				'X-Auth-Token': config.authToken
-			},
-		};
-
-		request(endpoint, function (error, response, body) {
-			if(error) {
-				console.log("ERROR: " + occupationEndpoint, error);
-			}
-
-			let objects = JSON.parse(body);
-
-			if (objects.length === 0) {
-				console.log("Public Objects Query Complete");
-				clearInterval(timer);
-			}
-
-			for (let i = 0; i < objects.length; i++) {
-				//Save object
-				let occ = objects[i];
-				let occupation = new models.PublicOccupation(occ.stateabbrv, occ.areaname, occ.occcode, occ.codetitle, occ.ratetype,
-							   occ.ratetydesc, occ.empcount, occ.mean, occ.median,
-							   occ.pct10, occ.pct25, occ.pct75, occ.pct90, occ.periodyear, occ.area);
-
-				occupation.save();
-			}
-
-			//console.log(objects);
-			console.log("Saving " + objects.length + " records to db");
-			console.log("Offset: ", offSet);
-		});
-		offSet = offSet + numRows;
-	}, config.intervalTime);
+function init(){
+	switch(argument) {
+		case "0":
+			console.log("Getting Public occupation Data");
+			publicOccupation(occupationEndpoint);
+			break;
+		case "1":
+			console.log("Getting Personal Income Data");
+			personalIncome(incomeEndpoint);
+			break;
+		default:
+			console.log("Running all");
+			publicOccupation(occupationEndpoint); 
+			personalIncome(incomeEndpoint);
+			break;
+	}
 }

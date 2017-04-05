@@ -56,10 +56,8 @@ module.exports = (router) => {
 		}
 	});
 
-
+/*
 	router.use(async (req, res, next) => {
-		res.setHeader('Content-Type', 'application/json');
-
 		let token = req.body.token || req.query.token || req.headers['x-access-token'];
 
 		if (token) {
@@ -80,7 +78,7 @@ module.exports = (router) => {
 			});
 		}
 	});
-
+	*/
 
 	router.get('/api/user/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
