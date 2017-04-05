@@ -68,7 +68,7 @@ var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var request = $.ajax({
-  url: "http://localhost:3000/member/" + memberId + "/publicwages",
+  url: "http://localhost:3000/api/member/" + memberId + "/publicwages",
   method: "GET",
   dataType: "html"
 });
