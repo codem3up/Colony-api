@@ -1,5 +1,5 @@
 # Colony
 
-##Introduction
+## Introduction
 
 Introduction goes here
