@@ -45,7 +45,7 @@ module.exports = (mongoose) => {
 				d.resolve(save);
 			}
 			catch (e) {
-				console.log("Failed to insert public occupation into the database");
+				console.log("Failed to insert public income into the database");
 				d.reject("Error: /models/PersonalIncome.js - save(): " + e);
 			}
 
@@ -60,18 +60,18 @@ module.exports = (mongoose) => {
 			return personalIncomes;
 		}
 		catch (e) {
-			console.log("Failed to get occupations : " + e);
+			console.log("Failed to get incomes : " + e);
 		}
 
 	};
 
 	PersonalIncome.Find = async (obj) => {
 		try {
-			let occupations = await personalIncomeModel.findOne(obj);
-			return occupations;
+			let incomes = await personalIncomeModel.findOne(obj);
+			return incomes;
 		}
 		catch (e) {
-			console.log("Failed to get an occupation : " + e);
+			console.log("Failed to get an incomes : " + e);
 		}
 	};
 
@@ -82,7 +82,7 @@ module.exports = (mongoose) => {
 			d.resolve(remove);
 		}
 		catch (e) {
-			console.log("Failed to delete a public occupation: " + e)
+			console.log("Failed to delete a public income: " + e)
 			d.reject("Error: /models/PersonalIncome.js - PersonalIncome.Delete(): " + e)
 		}
 
