@@ -1,7 +1,6 @@
 module.exports = (router) => {
 	const models = require('../models/index.js');
 
-
 	router.post('/api/user/:id/teamMember/new', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 

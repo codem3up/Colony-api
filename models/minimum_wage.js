@@ -40,18 +40,18 @@ module.exports = (mongoose) => {
 			return minimumWages;
 		}
 		catch (e) {
-			console.log("Failed to get occupations : " + e);
+			console.log("Failed to get minimum wages : " + e);
 		}
 
 	};
 
 	MinimumWage.Find = async (obj) => {
 		try {
-			let occupations = await minimumWageModel.findOne(obj);
-			return occupations;
+			let minimumWages = await minimumWageModel.findOne(obj);
+			return minimumWages;
 		}
 		catch (e) {
-			console.log("Failed to get an occupation : " + e);
+			console.log("Failed to get an minimum wage : " + e);
 		}
 	};
 
@@ -62,7 +62,7 @@ module.exports = (mongoose) => {
 			d.resolve(remove);
 		}
 		catch (e) {
-			console.log("Failed to delete a public occupation: " + e)
+			console.log("Failed to delete minimum wage: " + e)
 			d.reject("Error: /models/MinimumWage.js - MinimumWage.Delete(): " + e)
 		}
 
