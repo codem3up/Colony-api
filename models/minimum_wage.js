@@ -10,13 +10,20 @@ module.exports = (mongoose) => {
 
 	const minimumWageModel = mongoose.model('minimumWage', minimumWageSchema);
 
+	/**
+	 * @class {object} MinimumWage
+	 */
 	class MinimumWage {
 		constructor(year, minimumWage, tippedWage) {
-            this.year = year;
-            this.minimumWage = minimumWage;
-            this.tippedWage = tippedWage;
+			this.year = year;
+			this.minimumWage = minimumWage;
+			this.tippedWage = tippedWage;
 		}
-
+	
+	/**
+	 * @function save
+	 * @desc Saves MinimumWage object to db
+	 */
 		async save() {
 			let d = Q.defer();
 			let minimumWage = new minimumWageModel(this);
@@ -34,6 +41,12 @@ module.exports = (mongoose) => {
 
 	}
 
+	/**
+	 * @function All
+	 * @param {object} obj 
+	 * @desc Returns MinimumWage object from database that match objects properties
+	 * @returns {array} returns array of MinimumWage objects
+	 */
 	MinimumWage.All = async (obj) => {
 		try {
 			let minimumWages = await minimumWageModel.find(obj);
@@ -45,6 +58,12 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function Find
+	 * @param {object} obj 
+	 * @desc Returns one MinimumWage object from database that match objects properties
+	 * @returns {Object} returns MinimumWage object
+	 */
 	MinimumWage.Find = async (obj) => {
 		try {
 			let minimumWages = await minimumWageModel.findOne(obj);
@@ -55,6 +74,10 @@ module.exports = (mongoose) => {
 		}
 	};
 
+	/**
+	 * @function Delete
+	 * @desc Deletes MinimumWage object from db
+	 */
 	MinimumWage.Delete = (obj) => {
 		let d = Q.defer();
 		try {
