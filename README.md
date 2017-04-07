@@ -1,4 +1,4 @@
-![Colony Logo](https://raw.githubusercontent.com/codem3up/gocode/master/public/images/darkcolonylogo.png?token=ADh65BhCSPlfu5tN9XIBVfoRxQIltMKSks5Y7uDIwA%3D%3D)
+![Colony Logo](https://raw.githubusercontent.com/codem3up/Colony-api/master/public/images/darkcolonylogo.png?token=AAOaKWexuX0BEbvgkRxbpna7xtDRCPHXks5Y8EoKwA%3D%3D)
 
 
 
