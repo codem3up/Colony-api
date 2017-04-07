@@ -2,7 +2,6 @@ module.exports = (router) => {
 	const models = require('../models/index.js');
 	const request = require('request-promise');
 
-
 	router.get('/api/publicOccupation/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
@@ -17,7 +16,6 @@ module.exports = (router) => {
 			res.send({error: "Failed to get occupations"});
 		}
 	})
-
 
 	router.get('/api/publicOccupation/:id', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
@@ -63,7 +61,6 @@ module.exports = (router) => {
 		}
 
 	});
-
 
 	router.get('/api/publicOccupation/user/:id/occupationalWages', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');

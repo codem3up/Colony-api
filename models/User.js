@@ -142,8 +142,8 @@ module.exports = (mongoose) => {
 	 * @function VerifyToken
 	 * @param {string} token
 	 * @param {string} secret 
-	 * @desc Returns 
-	 * @returns {object} returns JWT token
+	 * @desc Returns the decoded JWT payload given the token and secret
+	 * @returns {object} returns decoded JWT payload
 	 */
 	User.VerifyToken = async (token, secret) => {
 		let d = Q.defer();
