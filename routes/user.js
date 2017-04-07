@@ -21,7 +21,6 @@ module.exports = (router) => {
 
 	});
 
-
 	router.post('/api/user/authenticate', async (req, res) => {
 		res.setHeader('Content-Type', 'application/json');
 
@@ -55,6 +54,30 @@ module.exports = (router) => {
 		}
 	});
 
+	router.use(async (req, res, next) => {
+		res.setHeader('Content-Type', 'application/json');
+
+		let token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+		if (token) {
+			try {
+				let decoded = await models.User.VerifyToken(token, req.app.get('jwtSecret'));
+				req.decoded = decoded;
+				next();
+			}
+			catch (e) {
+				console.error("Error: " + e)
+				res.send({success: false, message: 'Failed to authenticate token.'});
+			}
+		}
+		else {
+			return res.status(403).send({
+				success: false,
+				message: 'No token provided.'
+			});
+		}
+	});
+
 	router.get('/api/user/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 
@@ -68,7 +91,6 @@ module.exports = (router) => {
 			res.send({error: "Failed to get users list"});
 		}
 	});
-
 
 	router.get('/api/user/:id', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
