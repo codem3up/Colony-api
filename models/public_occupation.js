@@ -22,6 +22,9 @@ module.exports = (mongoose) => {
 
 	const publicOccupationModel = mongoose.model('publicOccupation', publicOccupationSchema);
 
+	/**
+	 * @class {object} PublicOccupation
+	 */
 	class PublicOccupation {
 		constructor(stateabbrv, areaname, occcode, codetitle, ratetype,
 					ratetydesc, empcount, mean, median,
@@ -44,6 +47,10 @@ module.exports = (mongoose) => {
 
 		}
 
+		/**
+		 * @function save
+		 * @desc Saves PublicOccupation object to db
+		 */
 		async save() {
 			let d = Q.defer();
 			let publicOccupation = new publicOccupationModel(this);
@@ -61,6 +68,12 @@ module.exports = (mongoose) => {
 
 	}
 
+	/**
+	 * @function All
+	 * @param {object} obj 
+	 * @desc Returns PublicOccupation object from database that match objects properties
+	 * @returns {array} returns array of PublicOccupation objects
+	 */
 	PublicOccupation.All = async (obj) => {
 		try {
 			let publicOccupations = await publicOccupationModel.find(obj);
@@ -72,6 +85,12 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function Find
+	 * @param {object} obj 
+	 * @desc Returns one PublicOccupation object from database that match objects properties
+	 * @returns {Object} returns PublicOccupation object
+	 */
 	PublicOccupation.Find = async (obj) => {
 		try {
 			let occupations = await publicOccupationModel.findOne(obj);
@@ -82,6 +101,10 @@ module.exports = (mongoose) => {
 		}
 	};
 
+	/**
+	 * @function Delete
+	 * @desc Deletes PublicOccupation object from db
+	 */
 	PublicOccupation.Delete = (obj) => {
 		let d = Q.defer();
 		try {

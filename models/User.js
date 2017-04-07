@@ -15,6 +15,9 @@ module.exports = (mongoose) => {
 
 	const userModel = mongoose.model('User', userSchema);
 
+	/**
+	 * @class {object} User
+	 */
 	class User {
 		constructor(username, passwordHash, hashSalt) {
 			this.username = username;
@@ -22,6 +25,10 @@ module.exports = (mongoose) => {
 			this.hashSalt = hashSalt;
 		};
 
+		/**
+		 * @function save
+		 * @desc Saves User object to db
+		 */
 		async save() {
 			let d = Q.defer();
 			let user = new userModel(this);
@@ -39,7 +46,12 @@ module.exports = (mongoose) => {
 
 	}
 
-
+	/**
+	 * @function All
+	 * @param {object} obj 
+	 * @desc Returns User object from database that match objects properties
+	 * @returns {array} returns array of User objects
+	 */
 	User.All = async () => {
 		try {
 			let users = await userModel.find({});
@@ -51,6 +63,12 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function Find
+	 * @param {object} obj 
+	 * @desc Returns one User object from database that match objects properties
+	 * @returns {Object} returns User object
+	 */
 	User.Find = async (idObj) => {
 		try {
 			let user = await userModel.findOne(idObj);
@@ -62,6 +80,12 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function GenerateSaltAndHash
+	 * @param {string} password 
+	 * @desc Generates and returns Salt and Hash of a given password
+	 * @returns {Object} returns Object that contains salt and hash
+	 */
 	User.GenerateSaltAndHash = async (password) => {
 		try {
 			let salt = await bcrypt.genSalt(saltRounds);
@@ -74,6 +98,13 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function ValidatePassword
+	 * @param {string} password
+	 * @param {string} hash 
+	 * @desc Returns boolean result based on whether password matches hash
+	 * @returns {boolean} returns boolean
+	 */
 	User.ValidatePassword = async (password, hash) => {
 		try {
 			let isValid = await bcrypt.compare(password, hash);
@@ -85,6 +116,13 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function GetToken
+	 * @param {string} user
+	 * @param {string} jwtSecret 
+	 * @desc Returns a valid 10 minute JWT given params  
+	 * @returns {object} returns JWT token
+	 */
 	User.GetToken = async (user, jwtSecret) => {
 		let d = Q.defer();
 		try {
@@ -100,7 +138,13 @@ module.exports = (mongoose) => {
 		return d.promise;
 	};
 
-
+	/**
+	 * @function VerifyToken
+	 * @param {string} token
+	 * @param {string} secret 
+	 * @desc Returns 
+	 * @returns {object} returns JWT token
+	 */
 	User.VerifyToken = async (token, secret) => {
 		let d = Q.defer();
 		try {

@@ -19,6 +19,9 @@ module.exports = (mongoose) => {
 
 	const personalIncomeModel = mongoose.model('personalIncome', personalIncomeSchema);
 
+	/**
+	 * @class {object} PersonalIncome
+	 */
 	class PersonalIncome {
 		constructor(stateabbrv, areaname, areatype, area, periodyear,
 					periodtype, pertypdesc, inctype, incdesc,
@@ -37,6 +40,10 @@ module.exports = (mongoose) => {
 			this.population = population;
 		}
 
+		/**
+		 * @function save
+		 * @desc Saves PersonalIncome object to db
+		 */
 		async save() {
 			let d = Q.defer();
 			let personalIncome = new personalIncomeModel(this);
@@ -54,6 +61,12 @@ module.exports = (mongoose) => {
 
 	}
 
+	/**
+	 * @function All
+	 * @param {object} obj 
+	 * @desc Returns PersonalIncome object from database that match objects properties
+	 * @returns {array} returns array of PersonalIncome objects
+	 */
 	PersonalIncome.All = async (obj) => {
 		try {
 			let personalIncomes = await personalIncomeModel.find(obj);
@@ -65,6 +78,12 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function Find
+	 * @param {object} obj 
+	 * @desc Returns one PersonalIncome object from database that match objects properties
+	 * @returns {Object} returns PersonalIncome object
+	 */
 	PersonalIncome.Find = async (obj) => {
 		try {
 			let incomes = await personalIncomeModel.findOne(obj);
@@ -75,6 +94,10 @@ module.exports = (mongoose) => {
 		}
 	};
 
+	/**
+	 * @function Delete
+	 * @desc Deletes PersonalIncome object from db
+	 */
 	PersonalIncome.Delete = (obj) => {
 		let d = Q.defer();
 		try {

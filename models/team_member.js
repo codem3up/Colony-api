@@ -17,6 +17,10 @@ module.exports = (mongoose) => {
 	});
 
 	const teamMemberModel = mongoose.model('teamMember', teamMemberSchema);
+	
+	/**
+	 * @class {object} TeamMember
+	 */
 	class TeamMember {
 		constructor(userId, firstName, lastName, occupation, wage,
 					wageType, startDate, createdAt, updatedAt,
@@ -34,6 +38,10 @@ module.exports = (mongoose) => {
 			this.location = location;
 		};
 
+		/**
+		 * @function save
+		 * @desc Saves TeamMember object to db
+		 */
 		async save() {
 			let d = Q.defer();
 			let teamMember = new teamMemberModel(this);
@@ -51,7 +59,12 @@ module.exports = (mongoose) => {
 
 	}
 
-
+	/**
+	 * @function All
+	 * @param {object} obj 
+	 * @desc Returns TeamMember object from database that match objects properties
+	 * @returns {array} returns array of TeamMember objects
+	 */
 	TeamMember.All = async (obj) => {
 		try {
 			let teamMembers = await teamMemberModel.find(obj);
@@ -63,13 +76,19 @@ module.exports = (mongoose) => {
 
 	};
 
+	/**
+	 * @function Find
+	 * @param {object} obj 
+	 * @desc Returns one TeamMember object from database that match objects properties
+	 * @returns {Object} returns TeamMember object
+	 */
 	TeamMember.Find = async (obj) => {
 		try {
-			let teamMembers = await teamMemberModel.findOne(obj);
-			if (!teamMembers) {
-				teamMembers = {};
+			let member = await teamMemberModel.findOne(obj);
+			if (!member) {
+				member = {};
 			}
-			return teamMembers;
+			return member;
 		}
 		catch (e) {
 			console.log("Failed to get a team member: " + e);
@@ -77,14 +96,10 @@ module.exports = (mongoose) => {
 
 	};
 
-	TeamMember.FindOne = async (obj) => {
-		let member = await(teamMemberModel.findOne(obj, function (err, member) {
-			if (err) return null;
-		}));
-
-		return member;
-	};
-
+	/**
+	 * @function Delete
+	 * @desc Deletes PublicOccupation object from db
+	 */
 	TeamMember.Delete = async (obj) => {
 		console.log("Deleting Team Member");
 		let d = Q.defer();

@@ -2,6 +2,7 @@ module.exports = (router) => {
 	const models = require('../models/index.js');
 	const request = require('request-promise');
 
+
 	router.get('/api/publicOccupation/all', async (req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		try {
